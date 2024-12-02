@@ -39,6 +39,21 @@ public class Day01 : BaseDay
             }
         }
         Console.WriteLine(distance);
+
+        int similarity = 0;
+        for (int i = 0; i < leftList.Count; i++)
+        {
+            int count = 0;
+            for (int j = 0; j < rightList.Count; j++)
+            {
+                if (leftList[i] == rightList[j])
+                {
+                    count++;
+                }
+            }
+            similarity += count*leftList[i];
+        }
+        Console.WriteLine($"Day One Part 2 Similarity: {similarity}");
     }
 
     public override ValueTask<string> Solve_1() => new($"Solution to {ClassPrefix} {CalculateIndex()}, part 1");
