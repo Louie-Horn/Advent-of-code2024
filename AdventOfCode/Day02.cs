@@ -10,47 +10,60 @@ public class Day02 : BaseDay
         List<string> lines = _input.Split("\n").ToList();
         int safeCount = 0;
 
-        for (int i = 0; i < lines.Count; i++)
+        for (int l = 0; l < lines.Count; l++)
         {
-            bool safe = true;
-            string currentLineString = lines[i];
-            List<int> numbers = currentLineString.Split(' ').Select(int.Parse).ToList();
-            bool ascending = true;
+            List<int> row = lines[l].Split(" ").Select(int.Parse).ToList();
+            bool? is_increasing = null;
+            int badlevels = 0;
 
-            for (int j = 1; j < numbers.Count; j++)
+            for (int i = 0; i < row.Count-1; i++)
             {
-                int difference = numbers[j] - numbers[j - 1];
-                if (j == 1)
+                int a = row[i];
+                int b = row[i + 1];
+                int difference = a - b;
+                bool bad = false;
+                
+                if (a == b) 
                 {
-                    ascending = difference > 0;
+                    bad = true;
                 }
-                if (difference == 0)
+                else if (is_increasing == null)
                 {
-                    safe = false;
+                    is_increasing = a < b;
                 }
 
-                if (ascending)
+                if (is_increasing == true)
                 {
-                    if (difference < 0 || difference > 3)
+                    if (a > b)
                     {
-                        safe = false;
+                        bad = true;
                     }
                 }
-                if (!ascending)
+                else
                 {
-                    if (difference > 0 || difference < -3)
+                    if (b > a)
                     {
-                        safe = false;
+                        bad = true;
                     }
+                }
+
+                if (Math.Abs(difference) > 3)
+                {
+                    bad = true;
+                }
+
+                if (bad)
+                {
+                    badlevels++;
                 }
             }
 
-            if (safe)
+            if (badlevels < 2)
             {
                 safeCount++;
             }
         }
-        Console.WriteLine($"{safeCount} safe lines");
+        Console.WriteLine($"{safeCount} safe reports");
     }
 
     public override ValueTask<string> Solve_1() => new($"Solution to {ClassPrefix} {CalculateIndex()}, part 1");
